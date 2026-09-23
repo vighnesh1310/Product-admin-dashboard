@@ -56,6 +56,8 @@ export default function ProductsPage() {
   }, [router, page]);
   
   useEffect(() => {
+    const controller = new AbortController();
+
     const timer = setTimeout(async () => {
       try {
         setIsLoading(true);
@@ -77,13 +79,22 @@ export default function ProductsPage() {
         const data = await searchProducts(
           search,
           PRODUCTS_PER_PAGE,
-          0
+          0,
+          controller.signal
         );
 
         setProducts(data.products);
         setTotal(data.total);
         setPage(1);
       } catch (error) {
+        if (error.name === "CanceledError") {
+          return;
+        }
+
+        if (error.name === "AbortError") {
+          return;
+        }
+
         console.error("Search failed:", error);
         setError("Failed to search products.");
       } finally {
@@ -93,6 +104,7 @@ export default function ProductsPage() {
 
     return () => {
       clearTimeout(timer);
+      controller.abort();
     };
   }, [search]);
 
