@@ -58,3 +58,21 @@ export const deleteProduct = async (id) => {
 
   return response.data;
 };
+
+export const getProductsByCategory = async (
+  category,
+  limit = 20,
+  skip = 0
+) => {
+  const response = await api.get(
+    `/products/category/${category}`,
+    {
+      params: {
+        limit,
+        skip,
+      },
+    }
+  );
+
+  return response.data;
+};

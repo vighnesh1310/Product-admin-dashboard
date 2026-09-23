@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import Navbar from "../../components/Navbar";
 import ProductList from "../../components/ProductList";
-import { getProducts, searchProducts,  getCategories, } from "../../services/productApi";
+import { getProducts, searchProducts,  getCategories, getProductsByCategory, } from "../../services/productApi";
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -78,18 +78,26 @@ export default function ProductsPage() {
         let data;
 
         if (search.trim() === "") {
-          data = await getProducts(
-            PRODUCTS_PER_PAGE,
-            skip
-          );
-        } else {
-          data = await searchProducts(
-            search.trim(),
-            PRODUCTS_PER_PAGE,
-            skip,
-            controller.signal
-          );
-        }
+            if (selectedCategory === "") {
+              data = await getProducts(
+                PRODUCTS_PER_PAGE,
+                skip
+              );
+            } else {
+              data = await getProductsByCategory(
+                selectedCategory,
+                PRODUCTS_PER_PAGE,
+                skip
+              );
+            }
+          } else {
+            data = await searchProducts(
+              search.trim(),
+              PRODUCTS_PER_PAGE,
+              skip,
+              controller.signal
+            );
+          }
 
         setProducts(data.products);
         setTotal(data.total);
@@ -112,7 +120,7 @@ export default function ProductsPage() {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [router, page, search]);
+  }, [router, page, search, selectedCategory]);
 
   useEffect(() => {
     const loadCategories = async () => {
