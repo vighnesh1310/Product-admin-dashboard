@@ -56,6 +56,13 @@ export default function ProductsPage() {
   }, [router, page]);
   
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.replace("/login");
+      return;
+    }
+
     const controller = new AbortController();
 
     const timer = setTimeout(async () => {
@@ -63,50 +70,46 @@ export default function ProductsPage() {
         setIsLoading(true);
         setError("");
 
+        const skip = (page - 1) * PRODUCTS_PER_PAGE;
+
+        let data;
+
         if (search.trim() === "") {
-          const data = await getProducts(
+          data = await getProducts(
             PRODUCTS_PER_PAGE,
-            0
+            skip
           );
-
-          setProducts(data.products);
-          setTotal(data.total);
-          setPage(1);
-
-          return;
+        } else {
+          data = await searchProducts(
+            search.trim(),
+            PRODUCTS_PER_PAGE,
+            skip,
+            controller.signal
+          );
         }
-
-        const data = await searchProducts(
-          search,
-          PRODUCTS_PER_PAGE,
-          0,
-          controller.signal
-        );
 
         setProducts(data.products);
         setTotal(data.total);
-        setPage(1);
       } catch (error) {
-        if (error.name === "CanceledError") {
+        if (
+          error.name === "CanceledError" ||
+          error.name === "AbortError"
+        ) {
           return;
         }
 
-        if (error.name === "AbortError") {
-          return;
-        }
-
-        console.error("Search failed:", error);
-        setError("Failed to search products.");
+        console.error("Failed to load products:", error);
+        setError("Failed to load products.");
       } finally {
         setIsLoading(false);
       }
-    }, 500);
+    }, search.trim() === "" ? 0 : 500);
 
     return () => {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [search]);
+  }, [router, page, search]);
 
   return (
     <div>
