@@ -25,6 +25,8 @@ export default function ProductsPage() {
 
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -81,13 +83,17 @@ export default function ProductsPage() {
             if (selectedCategory === "") {
               data = await getProducts(
                 PRODUCTS_PER_PAGE,
-                skip
+                skip,
+                sortBy,
+                sortOrder
               );
             } else {
               data = await getProductsByCategory(
                 selectedCategory,
                 PRODUCTS_PER_PAGE,
-                skip
+                skip,
+                sortBy,
+                sortOrder
               );
             }
           } else {
@@ -120,7 +126,7 @@ export default function ProductsPage() {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [router, page, search, selectedCategory]);
+  }, [router, page, search, selectedCategory, sortBy, sortOrder]);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -156,6 +162,23 @@ export default function ProductsPage() {
               {category.name}
             </option>
           ))}
+        </select>
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="">Sort By</option>
+          <option value="price">Price</option>
+          <option value="rating">Rating</option>
+        </select>
+
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          disabled={!sortBy}
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
         </select>
         <input
           type="text"

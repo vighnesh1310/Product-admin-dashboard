@@ -1,10 +1,19 @@
 import api from "./axios";
 
-export const getProducts = async (limit = 10, skip = 0) => {
+export const getProducts = async (
+  limit = 20,
+  skip = 0,
+  sortBy = "",
+  sortOrder = "asc"
+) => {
   const response = await api.get("/products", {
     params: {
       limit,
       skip,
+      ...(sortBy && {
+        sortBy,
+        order: sortOrder,
+      }),
     },
   });
 
@@ -34,6 +43,29 @@ export const getCategories = async () => {
 
   return response.data;
 };
+export const getProductsByCategory = async (
+  category,
+  limit = 20,
+  skip = 0,
+  sortBy = "",
+  sortOrder = "asc"
+) => {
+  const response = await api.get(
+    `/products/category/${category}`,
+    {
+      params: {
+        limit,
+        skip,
+        ...(sortBy && {
+          sortBy,
+          order: sortOrder,
+        }),
+      },
+    }
+  );
+
+  return response.data;
+};
 
 export const getProductById = async (id) => {
   const response = await api.get(`/products/${id}`);
@@ -59,20 +91,4 @@ export const deleteProduct = async (id) => {
   return response.data;
 };
 
-export const getProductsByCategory = async (
-  category,
-  limit = 20,
-  skip = 0
-) => {
-  const response = await api.get(
-    `/products/category/${category}`,
-    {
-      params: {
-        limit,
-        skip,
-      },
-    }
-  );
 
-  return response.data;
-};
