@@ -7,12 +7,19 @@ import Navbar from "../../components/Navbar";
 import ProductList from "../../components/ProductList";
 import { getProducts } from "../../services/productApi";
 
+const PRODUCTS_PER_PAGE = 20;
+
 export default function ProductsPage() {
   const router = useRouter();
 
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+
+  const skip = (page - 1) * PRODUCTS_PER_PAGE;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,9 +34,13 @@ export default function ProductsPage() {
         setIsLoading(true);
         setError("");
 
-        const data = await getProducts(10, 0);
+        const data = await getProducts(
+        PRODUCTS_PER_PAGE,
+        skip
+      );
 
-        setProducts(data.products);
+      setProducts(data.products);
+      setTotal(data.total);
       } catch (error) {
         console.error("Failed to load products:", error);
 
@@ -40,7 +51,7 @@ export default function ProductsPage() {
     };
 
     loadProducts();
-  }, [router]);
+  }, [router, page]);
 
   return (
     <div>
@@ -55,7 +66,30 @@ export default function ProductsPage() {
 
         {!isLoading && !error && (
           <ProductList products={products} />
+          
         )}
+        <div>
+          <button
+            onClick={() => setPage((currentPage) => currentPage - 1)}
+            disabled={page === 1 || isLoading}
+          >
+            Previous
+          </button>
+
+          <span>
+            Page {page}
+          </span>
+
+          <button
+            onClick={() => setPage((currentPage) => currentPage + 1)}
+            disabled={
+              page >= Math.ceil(total / PRODUCTS_PER_PAGE) ||
+              isLoading
+            }
+          >
+            Next
+          </button>
+        </div>
       </main>
     </div>
   );
