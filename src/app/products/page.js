@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import Navbar from "../../components/Navbar";
 import ProductList from "../../components/ProductList";
-import { getProducts } from "../../services/productApi";
+import { getProducts, searchProducts } from "../../services/productApi";
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -20,6 +20,8 @@ export default function ProductsPage() {
   const [total, setTotal] = useState(0);
 
   const skip = (page - 1) * PRODUCTS_PER_PAGE;
+
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -52,6 +54,47 @@ export default function ProductsPage() {
 
     loadProducts();
   }, [router, page]);
+  
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+
+        if (search.trim() === "") {
+          const data = await getProducts(
+            PRODUCTS_PER_PAGE,
+            0
+          );
+
+          setProducts(data.products);
+          setTotal(data.total);
+          setPage(1);
+
+          return;
+        }
+
+        const data = await searchProducts(
+          search,
+          PRODUCTS_PER_PAGE,
+          0
+        );
+
+        setProducts(data.products);
+        setTotal(data.total);
+        setPage(1);
+      } catch (error) {
+        console.error("Search failed:", error);
+        setError("Failed to search products.");
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search]);
 
   return (
     <div>
@@ -63,7 +106,12 @@ export default function ProductsPage() {
         {isLoading && <p>Loading products...</p>}
 
         {error && <p>{error}</p>}
-
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         {!isLoading && !error && (
           <ProductList products={products} />
           
