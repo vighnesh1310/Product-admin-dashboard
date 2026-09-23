@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import Navbar from "../../components/Navbar";
 import ProductList from "../../components/ProductList";
-import { getProducts, searchProducts } from "../../services/productApi";
+import { getProducts, searchProducts,  getCategories, } from "../../services/productApi";
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -22,6 +22,9 @@ export default function ProductsPage() {
   const skip = (page - 1) * PRODUCTS_PER_PAGE;
 
   const [search, setSearch] = useState("");
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -111,6 +114,19 @@ export default function ProductsPage() {
     };
   }, [router, page, search]);
 
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to load categories:", error);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -121,6 +137,18 @@ export default function ProductsPage() {
         {isLoading && <p>Loading products...</p>}
 
         {error && <p>{error}</p>}
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="">All Categories</option>
+
+          {categories.map((category) => (
+            <option key={category.slug} value={category.slug}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         <input
           type="text"
           placeholder="Search products..."
