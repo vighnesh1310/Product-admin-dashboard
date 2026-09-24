@@ -60,13 +60,19 @@ export default function EditProductPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !title.trim() ||
-      !price ||
-      !category.trim()
-    ) {
-      setError("Please fill all required fields.");
-      return;
+    if (!title.trim()) {
+    setError("Please enter a product title.");
+    return;
+    }
+
+    if (!price || Number(price) <= 0) {
+    setError("Please enter a valid price greater than 0.");
+    return;
+    }
+
+    if (!category.trim()) {
+    setError("Please enter a category.");
+    return;
     }
 
     try {
