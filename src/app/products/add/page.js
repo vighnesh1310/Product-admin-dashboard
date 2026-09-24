@@ -85,7 +85,7 @@ export default function AddProductPage() {
         "addedProducts",
         JSON.stringify(addedProducts)
         );
-
+        setIsDirty(false);
         router.push("/products");
     } catch (error) {
       console.error("Failed to add product:", error);
@@ -117,20 +117,35 @@ export default function AddProductPage() {
     <div>
       <Navbar />
 
-      <main>
-        <h1>Add Product</h1>
+      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
+        <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+            Add Product
+        </h1>
 
-        {error && <p>{error}</p>}
+        <p className="mt-1 text-sm text-gray-500">
+            Add a new product to your inventory
+        </p>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Title *</label>
+        {error && (
+        <div className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+        </div>
+        )}
+
+        <form onSubmit={handleSubmit}
+        className="space-y-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8"
+        >
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">Title *</label>
 
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Product title"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
             />
           </div>
 
@@ -144,6 +159,7 @@ export default function AddProductPage() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="Product price"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
             />
           </div>
 
@@ -155,6 +171,7 @@ export default function AddProductPage() {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               placeholder="Product category"
+               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
             />
           </div>
 
@@ -166,6 +183,8 @@ export default function AddProductPage() {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
                 placeholder="https://example.com/product.jpg"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
+
             />
           </div>
 
@@ -178,10 +197,11 @@ export default function AddProductPage() {
                 setDescription(e.target.value)
               }
               placeholder="Product description"
+              className="w-full resize-y rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
             />
           </div>
 
-          <button type="submit" disabled={isLoading}>
+          <button type="submit" disabled={isLoading} className="w-full rounded-lg bg-gray-900 px-4 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50">
             {isLoading ? "Adding..." : "Add Product"}
           </button>
         </form>
