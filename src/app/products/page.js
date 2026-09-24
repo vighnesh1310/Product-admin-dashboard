@@ -35,6 +35,8 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  
+  const [retryCount, setRetryCount] = useState(0);
 
   // Get page from URL
   const [page, setPage] = useState(() =>
@@ -207,6 +209,7 @@ export default function ProductsPage() {
     sortBy,
     sortOrder,
     skip,
+    retryCount,
   ]);
 
   // --------------------------------
@@ -379,23 +382,37 @@ export default function ProductsPage() {
         {/* Loading */}
 
         {isLoading && (
-          <p>Loading products...</p>
+          <div>
+            <p>Loading products...</p>
+          </div>
         )}
 
         {/* Error */}
 
         {error && (
-          <p>{error}</p>
+          <div>
+            <p>{error}</p>
+
+            <button
+              onClick={() => setRetryCount((count) => count + 1)}
+            >
+              Try Again
+            </button>
+          </div>
         )}
 
         {/* Products */}
 
         {!isLoading &&
           !error &&
-          products.length > 0 && (
-            <ProductList
-              products={products}
-            />
+          products.length === 0 && (
+            <div>
+              <h2>No products found</h2>
+
+              <p>
+                Try changing your search or filters.
+              </p>
+            </div>
           )}
 
         {/* Empty State */}
