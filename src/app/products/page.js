@@ -157,11 +157,14 @@ export default function ProductsPage() {
 
        
 
-        // Calculate total available pages
-        const totalItems =
-        data.total -
-        deletedProducts.length +
-        addedProducts.length;
+        const deletedCount = deletedProducts.length;
+
+        const totalItems = Math.max(
+          0,
+          data.total - deletedCount + addedProducts.length
+        );
+
+      setTotal(totalItems);;
 
       setTotal(totalItems);
       if (page === 1 && search.trim() === "" && selectedCategory === "") {
