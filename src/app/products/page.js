@@ -157,8 +157,6 @@ export default function ProductsPage() {
 
        
 
-        setTotal(data.total + addedProducts.length);
-
         // Calculate total available pages
         const totalItems =
         data.total -
@@ -166,7 +164,16 @@ export default function ProductsPage() {
         addedProducts.length;
 
       setTotal(totalItems);
+      if (page === 1 && search.trim() === "" && selectedCategory === "") {
+        const remainingSlots = PRODUCTS_PER_PAGE - data.products.length;
 
+        if (remainingSlots > 0) {
+          data.products = [
+            ...addedProducts.slice(0, remainingSlots),
+            ...data.products,
+          ];
+        }
+      }
       const totalPages = Math.max(
         1,
         Math.ceil(totalItems / PRODUCTS_PER_PAGE)
