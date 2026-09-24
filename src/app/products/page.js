@@ -425,6 +425,7 @@ export default function ProductsPage() {
           products.length > 0 && (
             <ProductList
               products={products}
+              onProductDeleted={() => setRetryCount((count) => count + 1)}
             />
           )}
         

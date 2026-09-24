@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { deleteProduct } from "../services/productApi";
 
-export default function ProductList({ products }) {
+export default function ProductList({ products, onProductDeleted, }) {
     const router = useRouter();
     
     const handleDelete = async (productId) => {
@@ -58,7 +58,8 @@ export default function ProductList({ products }) {
         JSON.stringify(deletedProducts)
         );
 
-        router.refresh();
+       // router.refresh();
+        onProductDeleted();
     } catch (error) {
         console.error(
         "Failed to delete product:",
