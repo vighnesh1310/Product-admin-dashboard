@@ -127,8 +127,26 @@ export default function ProductsPage() {
             );
           }
 
-          setProducts(data.products);
+          //setProducts(data.products);
+          //setTotal(data.total);
+
           setTotal(data.total);
+
+        // Calculate total available pages
+        const totalPages = Math.max(
+          1,
+          Math.ceil(data.total / PRODUCTS_PER_PAGE)
+        );
+
+        // If requested page is beyond the last page,
+        // move to the last available page
+        if (page > totalPages) {
+          setPage(totalPages);
+          return;
+        }
+
+        setProducts(data.products);
+        
         } catch (error) {
           // Ignore cancelled search requests
           if (
