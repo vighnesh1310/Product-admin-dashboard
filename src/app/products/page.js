@@ -155,11 +155,7 @@ export default function ProductsPage() {
           (product) => !deletedProducts.includes(product.id)
         );
 
-        // Add locally created products
-        data.products = [
-          ...addedProducts,
-          ...data.products,
-        ];
+       
 
         setTotal(data.total + addedProducts.length);
 
