@@ -122,6 +122,13 @@ export default function ProductList({ products }) {
                 <div className="mt-2">
                     <button
                     onClick={() =>
+                        router.push(`/products/${product.id}`)
+                    }
+                    >
+                    View
+                    </button>
+                    <button
+                    onClick={() =>
                         window.location.href = `/products/${product.id}/edit`
                     }
                     >

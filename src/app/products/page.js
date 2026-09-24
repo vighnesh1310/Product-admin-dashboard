@@ -164,10 +164,17 @@ export default function ProductsPage() {
         setTotal(data.total + addedProducts.length);
 
         // Calculate total available pages
-        const totalPages = Math.max(
-          1,
-          Math.ceil(data.total / PRODUCTS_PER_PAGE)
-        );
+        const totalItems =
+        data.total -
+        deletedProducts.length +
+        addedProducts.length;
+
+      setTotal(totalItems);
+
+      const totalPages = Math.max(
+        1,
+        Math.ceil(totalItems / PRODUCTS_PER_PAGE)
+      );
 
         // If requested page is beyond the last page,
         // move to the last available page
@@ -251,43 +258,48 @@ export default function ProductsPage() {
   // --------------------------------
 
   useEffect(() => {
-    const params = new URLSearchParams();
+  const params = new URLSearchParams();
 
-    if (page > 1) {
-      params.set("page", page);
-    }
+  if (page > 1) {
+    params.set("page", page);
+  }
 
-    if (search.trim()) {
-      params.set("search", search.trim());
-    }
+  if (search.trim()) {
+    params.set("search", search.trim());
+  }
 
-    if (selectedCategory) {
-      params.set(
-        "category",
-        selectedCategory
-      );
-    }
+  if (selectedCategory) {
+    params.set("category", selectedCategory);
+  }
 
-    if (sortBy) {
-      params.set("sortBy", sortBy);
-      params.set("order", sortOrder);
-    }
+  if (sortBy) {
+    params.set("sortBy", sortBy);
+    params.set("order", sortOrder);
+  }
 
-    const queryString = params.toString();
+  const queryString = params.toString();
+  const newUrl = queryString
+    ? `/products?${queryString}`
+    : "/products";
 
-    router.replace(
-      queryString
-        ? `/products?${queryString}`
-        : "/products"
-    );
-  }, [
-    page,
-    search,
-    selectedCategory,
-    sortBy,
-    sortOrder,
-    router,
-  ]);
+  // Don't navigate if URL is already correct
+  const currentQuery = searchParams.toString();
+  const currentUrl = currentQuery
+    ? `/products?${currentQuery}`
+    : "/products";
+
+  if (newUrl !== currentUrl) {
+    router.replace(newUrl);
+  }
+}, [
+  page,
+  search,
+  selectedCategory,
+  sortBy,
+  sortOrder,
+  router,
+  searchParams,
+]);
 
   // --------------------------------
   // UI
@@ -402,10 +414,20 @@ export default function ProductsPage() {
         )}
 
         {/* Products */}
+        {!isLoading &&
+          !error &&
+          products.length > 0 && (
+            <ProductList
+              products={products}
+            />
+          )}
+        
+          {/* Empty State */}
 
         {!isLoading &&
           !error &&
           products.length === 0 && (
+            
             <div>
               <h2>No products found</h2>
 
@@ -415,15 +437,7 @@ export default function ProductsPage() {
             </div>
           )}
 
-        {/* Empty State */}
-
-        {!isLoading &&
-          !error &&
-          products.length === 0 && (
-            <p>
-              No products found.
-            </p>
-          )}
+        
 
         {/* Pagination */}
 
