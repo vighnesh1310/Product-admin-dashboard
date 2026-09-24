@@ -44,16 +44,65 @@ export default function ProductDetailsPage() {
   }, [params.id, router]);
 
   if (isLoading) {
-    return <p>Loading product...</p>;
-  }
+  return (
+    <div>
+      <Navbar />
+      <main className="mx-auto max-w-6xl p-6">
+        <div className="rounded-lg border p-6 text-center">
+          <p className="text-gray-600">Loading product...</p>
+        </div>
+      </main>
+    </div>
+  );
+}
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+if (error) {
+  return (
+    <div>
+      <Navbar />
+      <main className="mx-auto max-w-6xl p-6">
+        <div className="rounded-lg border border-red-200 p-6 text-center">
+          <h2 className="text-lg font-semibold text-red-600">
+            Something went wrong
+          </h2>
 
-  if (!product) {
-    return <p>Product not found.</p>;
-  }
+          <p className="mt-2 text-gray-600">
+            {error}
+          </p>
+
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
+          >
+            Try Again
+          </button>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+if (!product) {
+  return (
+    <div>
+      <Navbar />
+      <main className="mx-auto max-w-6xl p-6">
+        <div className="rounded-lg border p-6 text-center">
+          <h2 className="text-lg font-semibold">
+            Product not found
+          </h2>
+
+          <button
+            onClick={() => router.push("/products")}
+            className="mt-4 rounded bg-black px-4 py-2 text-white"
+          >
+            Back to Products
+          </button>
+        </div>
+      </main>
+    </div>
+  );
+}
 
   return (
     <div>
