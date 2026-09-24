@@ -93,15 +93,27 @@ export default function ProductList({ products }) {
                 className="border-b hover:bg-gray-50"
               >
                 <td className="p-4">
-                  <img
-                    src={product.thumbnail}
-                    alt={product.title}
-                    className="h-16 w-16 rounded object-cover"
-                  />
+                  <button
+                    onClick={() =>
+                        router.push(`/products/${product.id}`)
+                    }
+                    >
+                    <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className="h-16 w-16 rounded object-cover"
+                    />
+                   </button>
                 </td>
 
                 <td className="p-4 font-medium">
-                  {product.title}
+                <button
+                    onClick={() =>
+                    router.push(`/products/${product.id}`)
+                    }
+                >
+                    {product.title}
+                </button>
                 </td>
 
                 <td className="p-4">
@@ -154,14 +166,26 @@ export default function ProductList({ products }) {
             key={product.id}
             className="rounded-lg border p-4 shadow-sm"
           >
+            <button
+            onClick={() =>
+                router.push(`/products/${product.id}`)
+            }
+            >
             <img
-              src={product.thumbnail}
-              alt={product.title}
-              className="mb-3 h-40 w-full rounded object-cover"
+                src={product.thumbnail}
+                alt={product.title}
+                className="mb-3 h-40 w-full rounded object-cover"
             />
+            </button>
 
             <h3 className="mb-2 text-lg font-semibold">
-              {product.title}
+            <button
+                onClick={() =>
+                router.push(`/products/${product.id}`)
+                }
+            >
+                {product.title}
+            </button>
             </h3>
 
             <p className="text-sm text-gray-600">
