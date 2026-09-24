@@ -14,6 +14,8 @@ export default function AddProductPage() {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
+  
+  const [isDirty, setIsDirty] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -92,6 +94,24 @@ export default function AddProductPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+  const handleBeforeUnload = (event) => {
+    if (!isDirty) return;
+
+    event.preventDefault();
+    event.returnValue = "";
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
+
+  return () => {
+    window.removeEventListener(
+      "beforeunload",
+      handleBeforeUnload
+    );
+  };
+}, [isDirty]);
 
   return (
     <div>
