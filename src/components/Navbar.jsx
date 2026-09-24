@@ -11,31 +11,33 @@ export default function Navbar() {
   };
 
   return (
-  <nav className="border-b bg-white">
-    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-      <button
-        onClick={() => router.push("/products")}
-        className="text-xl font-bold"
-      >
-        Product Manager
-      </button>
-
-      <div className="flex items-center gap-4">
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        {/* Logo / Brand */}
         <button
           onClick={() => router.push("/products")}
-          className="text-sm font-medium text-gray-700 hover:text-black"
+          className="text-lg font-bold tracking-tight text-gray-900 transition hover:text-gray-600 sm:text-xl"
         >
-          Products
+          Product Manager
         </button>
 
-        <button
-          onClick={handleLogout}
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-gray-100"
-        >
-          Logout
-        </button>
+        {/* Navigation */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button
+            onClick={() => router.push("/products")}
+            className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
+          >
+            Products
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-900 hover:text-white sm:px-4"
+          >
+            Logout
+          </button>
+        </div>
       </div>
-    </div>
-  </nav>
-);
+    </nav>
+  );
 }
