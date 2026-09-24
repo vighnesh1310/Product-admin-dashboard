@@ -316,28 +316,37 @@ export default function ProductsPage() {
       <Navbar />
 
       <main>
-        <div>
-          <h1>Products</h1>
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">
+              Products
+            </h1>
+
+            <p className="mt-1 text-gray-600">
+              Manage and explore your products
+            </p>
+          </div>
 
           <button
             onClick={() => router.push("/products/add")}
+            className="rounded-lg bg-black px-5 py-2.5 font-medium text-white hover:bg-gray-800"
           >
-            Add Product
+            + Add Product
           </button>
         </div>
         {/* Search */}
 
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-        />
-
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border px-4 py-2.5 outline-none focus:border-black"
+          />
+        </div>
         {/* Category */}
-
+       <div className="mb-6 grid gap-3 sm:grid-cols-3">
         <select
           value={selectedCategory}
           onChange={(e) =>
@@ -396,6 +405,7 @@ export default function ProductsPage() {
             Descending
           </option>
         </select>
+        </div>
 
         {/* Loading */}
 
