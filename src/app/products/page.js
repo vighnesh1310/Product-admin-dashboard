@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Navbar from "../../components/Navbar";
@@ -28,7 +28,7 @@ const getValidPage = (value) => {
   return page;
 };
 
-export default function ProductsPage() {
+function ProductsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -519,5 +519,12 @@ export default function ProductsPage() {
         </div>
       </main>
     </div>
+  );
+}
+export default function ProductsPageWrapper() {
+  return (
+    <Suspense fallback={<p>Loading products...</p>}>
+      <ProductsPage />
+    </Suspense>
   );
 }
