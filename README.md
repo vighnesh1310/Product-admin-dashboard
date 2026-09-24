@@ -1,36 +1,375 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Product Admin Dashboard
 
-## Getting Started
+A responsive product management dashboard built with Next.js, React, and Tailwind CSS.
 
-First, run the development server:
+## Live Demo
+
+https://product-admin-dashboard-gold-delta.vercel.app/
+
+## GitHub Repository
+
+https://github.com/vighnesh1310/Product-admin-dashboard
+
+## Features
+
+- User login and protected product pages
+- Product listing with pagination
+- Responsive desktop table and mobile cards
+- Debounced product search
+- Search race-condition protection
+- Category filtering
+- Price and rating sorting
+- URL-synchronized filters and pagination
+- Product details and reviews
+- Add, edit, and delete products
+- Loading, error, and empty states
+- Form validation
+- Unsaved changes protection
+- Logout functionality
+
+## Technologies Used
+
+- Next.js
+- React
+- JavaScript
+- Tailwind CSS
+- Axios
+- DummyJSON API
+- Git
+- GitHub
+- Vercel
+
+## API
+
+The project uses DummyJSON for authentication and product data.
+
+### Authentication
+
+```text
+POST /auth/login
+```
+
+### Products
+
+```text
+GET /products
+GET /products/search
+GET /products/categories
+GET /products/category/{category}
+GET /products/{id}
+POST /products/add
+PUT /products/{id}
+DELETE /products/{id}
+```
+
+## Login Credentials
+
+```text
+Username: emilys
+Password: emilyspass
+```
+
+## Application Flow
+
+```text
+Login
+  |
+  v
+Products Dashboard
+  |
+  +-- Search Products
+  +-- Filter by Category
+  +-- Sort Products
+  +-- Pagination
+  |
+  +-- View Product
+  |     +-- Product Details
+  |
+  +-- Add Product
+  +-- Edit Product
+  +-- Delete Product
+  |
+  v
+Logout
+```
+
+## Project Structure
+
+```text
+Product-admin-dashboard/
+|
++-- public/
+|
++-- src/
+|   |
+|   +-- app/
+|   |   |
+|   |   +-- login/
+|   |   |   +-- page.js
+|   |   |
+|   |   +-- products/
+|   |       |
+|   |       +-- [id]/
+|   |       |   +-- edit/
+|   |       |       +-- page.js
+|   |       |   +-- page.js
+|   |       |
+|   |       +-- add/
+|   |       |   +-- page.js
+|   |       |
+|   |       +-- page.js
+|   |
+|   +-- components/
+|   |   +-- Navbar.jsx
+|   |   +-- ProductList.jsx
+|   |
+|   +-- services/
+|       +-- axios.js
+|       +-- authApi.js
+|       +-- productApi.js
+|
++-- .gitignore
++-- package.json
++-- package-lock.json
++-- README.md
+```
+
+## Main Pages
+
+### Login
+
+```text
+/login
+```
+
+Used for authentication. After successful login, the user is redirected to `/products`.
+
+### Products
+
+```text
+/products
+```
+
+Main product management dashboard.
+
+### Add Product
+
+```text
+/products/add
+```
+
+Used to create a new product.
+
+### Product Details
+
+```text
+/products/{id}
+```
+
+Displays detailed information about a selected product.
+
+### Edit Product
+
+```text
+/products/{id}/edit
+```
+
+Used to update product information.
+
+## URL Query Parameters
+
+The products page keeps filters and pagination in the URL.
+
+```text
+/products?page=2
+/products?search=phone
+/products?category=beauty
+/products?sortBy=price&order=asc
+/products?page=2&category=beauty&sortBy=price&order=desc
+```
+
+Invalid page, sorting, or order values are handled safely.
+
+## CRUD Operations
+
+### Create
+
+Users can add a product using the Add Product form. The form validates title, price, category, and image URL.
+
+### Read
+
+Products are loaded from DummyJSON and displayed in the dashboard. Users can also open a product details page.
+
+### Update
+
+Users can edit title, price, category, and description.
+
+### Delete
+
+Users can delete products after confirming the delete action.
+
+## Local Product Handling
+
+DummyJSON provides simulated product write operations. The application therefore uses browser `localStorage` to maintain locally added, updated, and deleted product information.
+
+The application uses:
+
+```text
+token
+addedProducts
+updatedProducts
+deletedProducts
+```
+
+## Search Race Condition Handling
+
+Search uses debouncing to reduce unnecessary API requests.
+
+An `AbortController` is used to cancel an older search request when a newer search starts. This prevents an older API response from replacing the latest search results.
+
+## Authentication Protection
+
+Product pages check whether an authentication token exists in `localStorage`.
+
+If the user is not authenticated, `/products` redirects to `/login`.
+
+After logout, the token is removed and the user is redirected to the login page.
+
+## Responsive Design
+
+### Desktop
+
+Products are displayed in a table containing:
+
+```text
+Image
+Title
+Category
+Price
+Rating
+Stock
+Actions
+```
+
+### Mobile
+
+Products are displayed as cards containing:
+
+```text
+Image
+Title
+Category
+Price
+Rating
+Stock
+View
+Edit
+Delete
+```
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/vighnesh1310/Product-admin-dashboard.git
+```
+
+### 2. Open the project
+
+```bash
+cd Product-admin-dashboard
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 5. Open the application
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Production Build
 
-## Learn More
+Create a production build:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Start the production server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm start
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application is deployed using Vercel.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Live application:
+
+https://product-admin-dashboard-gold-delta.vercel.app/
+
+The project is connected to GitHub and deployed through Vercel. Changes pushed to the `main` branch can trigger a new deployment.
+
+## Testing Checklist
+
+- [x] Login with valid credentials
+- [x] Invalid login handling
+- [x] Login loading state
+- [x] Protected product route
+- [x] Logout
+- [x] Product listing
+- [x] Pagination
+- [x] Product search
+- [x] Search debounce
+- [x] Search race-condition protection
+- [x] Category filtering
+- [x] Price sorting
+- [x] Rating sorting
+- [x] URL filter synchronization
+- [x] Invalid URL parameter handling
+- [x] Product details
+- [x] Product reviews
+- [x] Add product
+- [x] Edit product
+- [x] Delete product
+- [x] Responsive product layout
+- [x] Loading state
+- [x] Error handling
+- [x] Empty state
+- [x] Unsaved form protection
+- [x] Production build
+
+## Future Improvements
+
+- Dashboard statistics and analytics
+- Better toast notifications
+- Advanced product filtering
+- Bulk product operations
+- User profile management
+- Persistent backend database for CRUD operations
+- Role-based access control
+- Product image upload
+- Automated testing
+
+## Author
+
+**Vighnesh Kadam**
+
+GitHub: https://github.com/vighnesh1310
+
+## License
+
+This project was created as a product admin dashboard assignment and for learning and demonstration purposes.
