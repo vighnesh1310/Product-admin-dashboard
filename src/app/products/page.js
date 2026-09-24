@@ -146,7 +146,7 @@ export default function ProductsPage() {
         }
 
         setProducts(data.products);
-        
+
         } catch (error) {
           // Ignore cancelled search requests
           if (
@@ -266,8 +266,15 @@ export default function ProductsPage() {
       <Navbar />
 
       <main>
-        <h1>Products</h1>
+        <div>
+          <h1>Products</h1>
 
+          <button
+            onClick={() => router.push("/products/add")}
+          >
+            Add Product
+          </button>
+        </div>
         {/* Search */}
 
         <input
