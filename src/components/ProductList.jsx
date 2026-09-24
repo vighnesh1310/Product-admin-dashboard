@@ -1,6 +1,74 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { deleteProduct } from "../services/productApi";
+
 export default function ProductList({ products }) {
+    const router = useRouter();
+    
+    const handleDelete = async (productId) => {
+    const confirmed = window.confirm(
+        "Are you sure you want to delete this product?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        // Check locally added products
+        const addedProducts = JSON.parse(
+        localStorage.getItem("addedProducts") || "[]"
+        );
+
+        const isLocalProduct = addedProducts.some(
+        (product) => product.id === productId
+        );
+
+        // If it is a locally added product,
+        // remove it directly from localStorage
+        if (isLocalProduct) {
+        const remainingProducts = addedProducts.filter(
+            (product) => product.id !== productId
+        );
+
+        localStorage.setItem(
+            "addedProducts",
+            JSON.stringify(remainingProducts)
+        );
+
+        router.refresh();
+        return;
+        }
+
+        // Otherwise delete the original API product
+        await deleteProduct(productId);
+
+        // Save deleted product ID locally
+        const deletedProducts = JSON.parse(
+        localStorage.getItem("deletedProducts") || "[]"
+        );
+
+        if (!deletedProducts.includes(productId)) {
+        deletedProducts.push(productId);
+        }
+
+        localStorage.setItem(
+        "deletedProducts",
+        JSON.stringify(deletedProducts)
+        );
+
+        router.refresh();
+    } catch (error) {
+        console.error(
+        "Failed to delete product:",
+        error
+        );
+
+        alert("Failed to delete product.");
+    }
+    };
+
   return (
     <div className="w-full">
 
@@ -59,6 +127,11 @@ export default function ProductList({ products }) {
                     >
                     Edit
                     </button>
+                    <button
+                    onClick={() => handleDelete(product.id)}
+                    >
+                    Delete
+                    </button>
                 </div>
                 </td>
               </tr>
@@ -106,6 +179,11 @@ export default function ProductList({ products }) {
             }
             >
             Edit
+            </button>
+            <button
+            onClick={() => handleDelete(product.id)}
+            >
+            Delete
             </button>
           </div>
         ))}

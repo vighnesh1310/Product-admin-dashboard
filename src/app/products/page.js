@@ -145,6 +145,14 @@ export default function ProductsPage() {
           return updatedProducts[product.id] || product;
         });
 
+        const deletedProducts = JSON.parse(
+          localStorage.getItem("deletedProducts") || "[]"
+        );
+
+        data.products = data.products.filter(
+          (product) => !deletedProducts.includes(product.id)
+        );
+
         // Add locally created products
         data.products = [
           ...addedProducts,
