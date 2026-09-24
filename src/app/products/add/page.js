@@ -28,9 +28,31 @@ export default function AddProductPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title.trim() || !price || !category.trim()) {
-      setError("Please fill all required fields.");
-      return;
+   if (!title.trim()) {
+    setError("Please enter a product title.");
+    return;
+    }
+
+    if (!price || Number(price) <= 0) {
+    setError("Please enter a valid price greater than 0.");
+    return;
+    }
+
+    if (!category.trim()) {
+    setError("Please enter a category.");
+    return;
+    }
+
+    if (!image.trim()) {
+    setError("Please enter an image URL.");
+    return;
+    }
+
+    try {
+    new URL(image.trim());
+    } catch {
+    setError("Please enter a valid image URL.");
+    return;
     }
 
     try {
