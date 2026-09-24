@@ -49,7 +49,17 @@ export default function ProductList({ products }) {
                 </td>
 
                 <td className="p-4">
-                  {product.stock}
+                {product.stock}
+
+                <div className="mt-2">
+                    <button
+                    onClick={() =>
+                        window.location.href = `/products/${product.id}/edit`
+                    }
+                    >
+                    Edit
+                    </button>
+                </div>
                 </td>
               </tr>
             ))}
@@ -87,8 +97,16 @@ export default function ProductList({ products }) {
             </p>
 
             <p className="mt-1">
-              Stock: {product.stock}
+            Stock: {product.stock}
             </p>
+
+            <button
+            onClick={() =>
+                window.location.href = `/products/${product.id}/edit`
+            }
+            >
+            Edit
+            </button>
           </div>
         ))}
       </div>

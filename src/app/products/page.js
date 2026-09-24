@@ -130,7 +130,28 @@ export default function ProductsPage() {
           //setProducts(data.products);
           //setTotal(data.total);
 
-          setTotal(data.total);
+          // Get locally added products
+        const addedProducts = JSON.parse(
+          localStorage.getItem("addedProducts") || "[]"
+        );
+
+        // Get locally updated products
+        const updatedProducts = JSON.parse(
+          localStorage.getItem("updatedProducts") || "{}"
+        );
+
+        // Apply local updates
+        data.products = data.products.map((product) => {
+          return updatedProducts[product.id] || product;
+        });
+
+        // Add locally created products
+        data.products = [
+          ...addedProducts,
+          ...data.products,
+        ];
+
+        setTotal(data.total + addedProducts.length);
 
         // Calculate total available pages
         const totalPages = Math.max(

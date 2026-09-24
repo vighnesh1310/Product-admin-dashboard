@@ -13,6 +13,7 @@ export default function AddProductPage() {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -41,13 +42,27 @@ export default function AddProductPage() {
         price: Number(price),
         category: category.trim(),
         description: description.trim(),
-      };
+        thumbnail: image.trim(),
+        images: image.trim() ? [image.trim()] : [],
+        };
 
       const data = await addProduct(product);
 
-      console.log("Product added:", data);
+        console.log("Product added:", data);
 
-      router.push("/products");
+        // Save added product locally
+        const addedProducts = JSON.parse(
+        localStorage.getItem("addedProducts") || "[]"
+        );
+
+        addedProducts.push(data);
+
+        localStorage.setItem(
+        "addedProducts",
+        JSON.stringify(addedProducts)
+        );
+
+        router.push("/products");
     } catch (error) {
       console.error("Failed to add product:", error);
       setError("Failed to add product.");
@@ -98,6 +113,17 @@ export default function AddProductPage() {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               placeholder="Product category"
+            />
+          </div>
+
+          <div>
+            <label>Image URL</label>
+
+            <input
+                type="url"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                placeholder="https://example.com/product.jpg"
             />
           </div>
 
