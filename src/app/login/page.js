@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { loginUser } from "../../services/authApi";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -23,6 +25,7 @@ export default function LoginPage() {
     localStorage.setItem("token", data.accessToken);
 
     console.log("Login successful");
+    router.push("/products");
   } catch (error) {
     setError(
       error.response?.data?.message || "Invalid username or password"
@@ -33,8 +36,10 @@ export default function LoginPage() {
 };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <h1 className="mb-6 text-center text-3xl font-bold">
+        Login
+      </h1>
 
       <form onSubmit={handleSubmit}>
         {error && <p style={{ color: "red" }}>{error}</p>}
@@ -42,6 +47,7 @@ export default function LoginPage() {
           type="text"
           placeholder="Username"
           value={username}
+          className="w-full rounded-lg border px-4 py-2.5 outline-none focus:border-black"
           onChange={(e) => setUsername(e.target.value)}
         />
 
@@ -49,12 +55,14 @@ export default function LoginPage() {
           type="password"
           placeholder="Password"
           value={password}
+          className="w-full rounded-lg border px-4 py-2.5 outline-none focus:border-black"
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
             type="submit"
             disabled={isLoading}
+            className="mt-4 w-full rounded-lg bg-black px-4 py-2.5 font-medium text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
         >
             {isLoading ? "Logging in..." : "Login"}
         </button>
