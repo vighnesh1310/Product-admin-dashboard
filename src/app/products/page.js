@@ -346,13 +346,14 @@ export default function ProductsPage() {
           />
         </div>
         {/* Category */}
-       <div className="mb-6 grid gap-3 sm:grid-cols-3">
+       <div className="mb-6 grid gap-3 sm:grid-cols-4">
         <select
           value={selectedCategory}
           onChange={(e) =>
             setSelectedCategory(e.target.value)
           }
         >
+          
           <option value="">
             All Categories
           </option>
@@ -406,6 +407,18 @@ export default function ProductsPage() {
           </option>
         </select>
         </div>
+        <button
+          onClick={() => {
+            setSearch("");
+            setSelectedCategory("");
+            setSortBy("");
+            setSortOrder("asc");
+            setPage(1);
+          }}
+          className="rounded-lg border px-3 py-2.5 hover:bg-gray-100"
+        >
+          Clear Filters
+        </button>
 
         {/* Loading */}
 
@@ -458,45 +471,51 @@ export default function ProductsPage() {
 
         {/* Pagination */}
 
-        <div>
-          <button
-            onClick={() =>
-              setPage(
-                (currentPage) =>
-                  currentPage - 1
-              )
-            }
-            disabled={
-              page === 1 ||
-              isLoading
-            }
-          >
-            Previous
-          </button>
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
+          <p className="text-sm text-gray-600">
+            {total > 0
+              ? `Showing ${
+                  (page - 1) * PRODUCTS_PER_PAGE + 1
+                }-${Math.min(
+                  page * PRODUCTS_PER_PAGE,
+                  total
+                )} of ${total} products`
+              : "No products"}
+          </p>
 
-          <span>
-            {" "}
-            Page {page}{" "}
-          </span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() =>
+                setPage((currentPage) => currentPage - 1)
+              }
+              disabled={page === 1 || isLoading}
+              className="rounded-lg border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Previous
+            </button>
 
-          <button
-            onClick={() =>
-              setPage(
-                (currentPage) =>
-                  currentPage + 1
-              )
-            }
-            disabled={
-              page >=
-                Math.ceil(
-                  total /
-                    PRODUCTS_PER_PAGE
-                ) ||
-              isLoading
-            }
-          >
-            Next
-          </button>
+            <span className="text-sm font-medium">
+              Page {page} of{" "}
+              {Math.max(
+                1,
+                Math.ceil(total / PRODUCTS_PER_PAGE)
+              )}
+            </span>
+
+            <button
+              onClick={() =>
+                setPage((currentPage) => currentPage + 1)
+              }
+              disabled={
+                page >=
+                  Math.ceil(total / PRODUCTS_PER_PAGE) ||
+                isLoading
+              }
+              className="rounded-lg border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </main>
     </div>
