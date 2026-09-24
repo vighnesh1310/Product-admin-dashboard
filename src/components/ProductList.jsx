@@ -74,16 +74,16 @@ export default function ProductList({ products, onProductDeleted, }) {
     <div className="w-full">
 
       {/* Desktop Table */}
-      <div className="hidden md:block overflow-x-auto rounded-lg border">
-        <table className="w-full text-left">
+      <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm md:block">
+        <table className="w-full min-w-[900px] text-left">
           <thead>
-            <tr className="border-b bg-gray-100">
-              <th className="p-4">Image</th>
-              <th className="p-4">Title</th>
-              <th className="p-4">Category</th>
-              <th className="p-4">Price</th>
-              <th className="p-4">Rating</th>
-              <th className="p-4">Stock</th>
+           <tr className="border-b border-gray-200 bg-gray-50">
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Image</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Title</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Category</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Price</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Rating</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Stock</th>
             </tr>
           </thead>
 
@@ -91,7 +91,7 @@ export default function ProductList({ products, onProductDeleted, }) {
             {products.map((product) => (
               <tr
                 key={product.id}
-                className="border-b hover:bg-gray-50"
+                className="border-b border-gray-100 transition hover:bg-gray-50"
               >
                 <td className="p-4">
                   <button
@@ -102,7 +102,7 @@ export default function ProductList({ products, onProductDeleted, }) {
                     <img
                         src={product.thumbnail}
                         alt={product.title}
-                        className="h-16 w-16 rounded object-cover"
+                        className="h-14 w-14 rounded-lg border border-gray-200 bg-gray-50 object-cover"
                     />
                    </button>
                 </td>
@@ -121,22 +121,33 @@ export default function ProductList({ products, onProductDeleted, }) {
                   {product.category}
                 </td>
 
-                <td className="p-4">
+                <td className="px-4 py-4 font-medium text-gray-900">
                   ${product.price}
                 </td>
 
-                <td className="p-4">
-                  ⭐ {product.rating}
+                <td className="px-4 py-4">
+                <span className="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-1 text-xs font-medium text-yellow-700">
+                    ⭐ {product.rating}
+                </span>
                 </td>
 
-                <td className="p-4">
-                {product.stock}
+                <td className="px-4 py-4">
+                <span
+                    className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
+                    product.stock > 0
+                        ? "bg-green-50 text-green-700"
+                        : "bg-red-50 text-red-700"
+                    }`}
+                >
+                    {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                </span>
 
-                <div className="mt-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                     <button
                     onClick={() =>
                         router.push(`/products/${product.id}`)
                     }
+                    className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50"
                     >
                     View
                     </button>
@@ -144,11 +155,13 @@ export default function ProductList({ products, onProductDeleted, }) {
                     onClick={() =>
                         window.location.href = `/products/${product.id}/edit`
                     }
+                    className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50"
                     >
                     Edit
                     </button>
                     <button
                     onClick={() => handleDelete(product.id)}
+                    className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-100"
                     >
                     Delete
                     </button>
@@ -161,11 +174,11 @@ export default function ProductList({ products, onProductDeleted, }) {
       </div>
 
       {/* Mobile Cards */}
-      <div className="grid gap-4 md:hidden">
+      <div className="grid gap-4 sm:grid-cols-2 md:hidden">
         {products.map((product) => (
           <div
             key={product.id}
-            className="rounded-lg border p-4 shadow-sm"
+            className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
           >
             <button
             onClick={() =>
@@ -175,11 +188,11 @@ export default function ProductList({ products, onProductDeleted, }) {
             <img
                 src={product.thumbnail}
                 alt={product.title}
-                className="mb-3 h-40 w-full rounded object-cover"
+                className="h-48 w-full bg-gray-50 object-contain p-4"
             />
             </button>
 
-            <h3 className="mb-2 text-lg font-semibold">
+            <h3 className="px-4 pt-4 text-lg font-semibold text-gray-900">
             <button
                 onClick={() =>
                 router.push(`/products/${product.id}`)
@@ -189,40 +202,57 @@ export default function ProductList({ products, onProductDeleted, }) {
             </button>
             </h3>
 
-            <p className="text-sm text-gray-600">
-              Category: {product.category}
+            <div className="space-y-2 px-4 pb-4 pt-3">
+            <p className="text-sm text-gray-500">
+                Category: <span className="font-medium text-gray-700">{product.category}</span>
             </p>
 
-            <p className="mt-1">
-              Price: ${product.price}
+            <p className="text-sm text-gray-700">
+                Price: <span className="font-semibold">${product.price}</span>
             </p>
 
-            <p className="mt-1">
-              Rating: ⭐ {product.rating}
+            <p className="text-sm">
+                Rating:
+                <span className="ml-1 rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700">
+                ⭐ {product.rating}
+                </span>
             </p>
 
-            <p className="mt-1">
-            Stock: {product.stock}
+            <p className="text-sm">
+                Stock:
+                <span
+                className={`ml-1 font-medium ${
+                    product.stock > 0 ? "text-green-600" : "text-red-600"
+                }`}
+                >
+                {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                </span>
             </p>
+            </div>
+            <div className="flex gap-2 pt-2">
             <button
-            onClick={() =>
-                router.push(`/products/${product.id}`)
-            }
+                onClick={() => router.push(`/products/${product.id}`)}
+                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
-            View
+                View
             </button>
+
             <button
-            onClick={() =>
+                onClick={() =>
                 window.location.href = `/products/${product.id}/edit`
-            }
+                }
+                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
-            Edit
+                Edit
             </button>
+
             <button
-            onClick={() => handleDelete(product.id)}
+                onClick={() => handleDelete(product.id)}
+                className="flex-1 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100"
             >
-            Delete
+                Delete
             </button>
+            </div>
           </div>
         ))}
       </div>

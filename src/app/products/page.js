@@ -164,7 +164,7 @@ function ProductsPage() {
           data.total - deletedCount + addedProducts.length
         );
 
-      setTotal(totalItems);;
+      //setTotal(totalItems);;
 
       setTotal(totalItems);
       if (page === 1 && search.trim() === "" && selectedCategory === "") {
@@ -315,21 +315,21 @@ function ProductsPage() {
     <div>
       <Navbar />
 
-      <main>
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mb-6 flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
               Products
             </h1>
 
-            <p className="mt-1 text-gray-600">
+            <p className="mt-1 text-sm text-gray-500">
               Manage and explore your products
             </p>
           </div>
 
           <button
             onClick={() => router.push("/products/add")}
-            className="rounded-lg bg-black px-5 py-2.5 font-medium text-white hover:bg-gray-800"
+           className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-black"
           >
             + Add Product
           </button>
@@ -342,7 +342,7 @@ function ProductsPage() {
             placeholder="Search products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border px-4 py-2.5 outline-none focus:border-black"
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
           />
         </div>
         {/* Category */}
@@ -352,6 +352,7 @@ function ProductsPage() {
           onChange={(e) =>
             setSelectedCategory(e.target.value)
           }
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 shadow-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200 disabled:bg-gray-100 disabled:text-gray-400"
         >
           
           <option value="">
@@ -375,6 +376,7 @@ function ProductsPage() {
           onChange={(e) =>
             setSortBy(e.target.value)
           }
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 shadow-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200 disabled:bg-gray-100 disabled:text-gray-400"
         >
           <option value="">
             Sort By
@@ -396,6 +398,7 @@ function ProductsPage() {
           onChange={(e) =>
             setSortOrder(e.target.value)
           }
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 shadow-sm outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-200 disabled:bg-gray-100 disabled:text-gray-400"
           disabled={!sortBy}
         >
           <option value="asc">
@@ -415,7 +418,7 @@ function ProductsPage() {
             setSortOrder("asc");
             setPage(1);
           }}
-          className="rounded-lg border px-3 py-2.5 hover:bg-gray-100"
+         className="mb-5 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50"
         >
           Clear Filters
         </button>
