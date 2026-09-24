@@ -21,6 +21,8 @@ export default function EditProductPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+  
+  const [isDirty, setIsDirty] = useState(false);
 
   // Protect page
   useEffect(() => {
@@ -121,6 +123,24 @@ export default function EditProductPage() {
   if (isLoading) {
     return <p>Loading product...</p>;
   }
+
+  useEffect(() => {
+  const handleBeforeUnload = (event) => {
+    if (!isDirty) return;
+
+    event.preventDefault();
+    event.returnValue = "";
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
+
+  return () => {
+    window.removeEventListener(
+      "beforeunload",
+      handleBeforeUnload
+    );
+  };
+}, [isDirty]);
 
   return (
     <div>
