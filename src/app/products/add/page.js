@@ -116,9 +116,19 @@ export default function AddProductPage() {
   return (
     <div>
       <Navbar />
+      
 
       <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
-        <div className="mb-6">
+        
+       <div className="mb-6">
+        <button
+            type="button"
+            onClick={() => router.push("/products")}
+            className="mb-4 inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+        >
+            ← Back to Products
+        </button>
+
         <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
             Add Product
         </h1>
